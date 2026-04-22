@@ -1,0 +1,16 @@
+{
+  "picks": [
+    {
+      "overall": 1,
+      "round": 1,
+      "teamDisplay": "Las Vegas Raiders",
+      "playerDisplay": "Example Player",
+      "status": "SELECTION_MADE",
+      "traded": false,
+      "headshotUrl": "https://a.espncdn.com/i/headshots/college-football/players/full/4950400.png",
+      "positionAbbrev": "LB",
+      "collegeDisplay": null,
+      "teamLogoUrl": "https://a.espncdn.com/i/teamlogos/nfl/500/scoreboard/lv.png"
+    }
+  ]
+}
