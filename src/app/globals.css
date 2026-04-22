@@ -77,6 +77,7 @@ main {
     align-items: stretch;
     /* Override space-between so the CTA button stays under the copy */
     justify-content: flex-start;
+    align-content: flex-start;
   }
 
   a.cta-btn {
@@ -134,8 +135,16 @@ h1 {
   margin: 0;
   font-size: 0.88rem;
   color: var(--text);
-  flex: 1 1 12rem;
+  /* Default: no flex growth (safe when .form-cta is column on narrow screens). */
+  flex: 0 1 auto;
   line-height: 1.4;
+}
+
+@media (min-width: 600px) {
+  .form-cta-text {
+    /* Row layout: let copy use horizontal space before the button */
+    flex: 1 1 12rem;
+  }
 }
 
 .form-cta-text strong {
@@ -242,24 +251,6 @@ tr:hover td {
 .num {
   text-align: right;
   font-variant-numeric: tabular-nums;
-}
-
-/* Standings: P–Pick, P–Team, and R1 share the same column width */
-.standings-table {
-  table-layout: fixed;
-  width: 100%;
-}
-
-.standings-table col.standings-col-rank {
-  width: 2.25rem;
-}
-
-.standings-table col.standings-col-total {
-  width: 3.25rem;
-}
-
-.standings-table col.standings-col-split {
-  width: 4rem;
 }
 
 button.link {

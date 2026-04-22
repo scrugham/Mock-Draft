@@ -49,15 +49,7 @@ export function ClassicDraftView({ live, sorted, selectedId, setSelectedId, load
         <section className="panel">
           <h2>Standings</h2>
           <div className="table-scroll">
-            <table className="standings-table">
-              <colgroup>
-                <col className="standings-col-rank" />
-                <col className="standings-col-name" />
-                <col className="standings-col-total" />
-                <col className="standings-col-split" />
-                <col className="standings-col-split" />
-                <col className="standings-col-split" />
-              </colgroup>
+            <table>
               <thead>
                 <tr>
                   <th>#</th>
