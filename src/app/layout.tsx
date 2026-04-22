@@ -2,7 +2,7 @@ import type { Metadata, Viewport } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "Scrugg’s Mock Draft-Off - Live",
+  title: "Scrugg’s Mock Draft-Off",
   description: "Live Round 1 board and standings for the 2026 mock draft competition.",
   icons: {
     icon: [{ url: "/logo.png", type: "image/png" }],

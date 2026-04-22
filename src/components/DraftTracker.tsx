@@ -65,11 +65,14 @@ export function DraftTracker() {
   }, [entries, live?.picks]);
 
   const sorted = useMemo(
-    () => [...scored].sort((a, b) => b.score.total - a.score.total),
+    () =>
+      [...scored].sort((a, b) => {
+        const d = b.score.total - a.score.total;
+        if (d !== 0) return d;
+        return a.entry.name.localeCompare(b.entry.name, undefined, { sensitivity: "base" });
+      }),
     [scored],
   );
-
-  const leader = sorted[0]?.score.total ?? 0;
 
   return (
     <main className={view === "faces" ? "layout-wide" : undefined}>
@@ -82,12 +85,12 @@ export function DraftTracker() {
           className="site-logo"
           priority
         />
-        <h1>Scrugg&apos;s Mock Draft-Off - Live</h1>
+        <h1>Scrugg&apos;s Mock Draft-Off</h1>
       </div>
 
       <div className="form-cta" role="region" aria-label="Mock draft entry form">
         <p className="form-cta-text">
-          <strong>Mock draft form</strong> — submit your Round 1 picks on Zite (opens in a new tab).
+          <strong>Mock draft form</strong> - submit your Round 1 picks on Zite (opens in a new tab).
         </p>
         <a
           className="cta-btn"
@@ -127,7 +130,6 @@ export function DraftTracker() {
         <ClassicDraftView
           live={live}
           sorted={sorted}
-          leader={leader}
           selectedId={selectedId}
           setSelectedId={setSelectedId}
           loadErr={loadErr}

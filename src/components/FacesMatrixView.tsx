@@ -92,10 +92,12 @@ export function FacesMatrixView({ live, sorted, loadErr }: Props) {
                         teamLogoUrl={slot?.teamLogoUrl}
                         outcome="pending"
                         titleLines={[
-                          slot?.playerDisplay ? `Player: ${slot.playerDisplay}` : "On the clock",
-                          slot?.positionAbbrev ? `Pos: ${slot.positionAbbrev}` : "",
+                          actualKnown && slot?.playerDisplay
+                            ? `Player: ${slot.playerDisplay}`
+                            : "Pick not in yet",
+                          actualKnown && slot?.positionAbbrev ? `Pos: ${slot.positionAbbrev}` : "",
                           slot?.teamDisplay ? `Team: ${slot.teamDisplay}` : "",
-                          slot?.status ? `Status: ${slot.status}` : "",
+                          actualKnown && slot?.status ? `Status: ${slot.status}` : "",
                         ]}
                       />
                     </td>

@@ -3,17 +3,17 @@
 import { useEffect, useRef } from "react";
 import type { LiveDraftResponse, ScoredEntry } from "@/lib/types";
 import { rowPoints } from "@/lib/row-points";
+import { slotHasActualPlayer } from "@/lib/live-pick-display";
 
 type Props = {
   live: LiveDraftResponse | null;
   sorted: ScoredEntry[];
-  leader: number;
   selectedId: string | null;
   setSelectedId: (id: string | null) => void;
   loadErr: string | null;
 };
 
-export function ClassicDraftView({ live, sorted, leader, selectedId, setSelectedId, loadErr }: Props) {
+export function ClassicDraftView({ live, sorted, selectedId, setSelectedId, loadErr }: Props) {
   const selected = sorted.find((s) => s.entry.id === selectedId) ?? null;
   const entryDetailRef = useRef<HTMLElement>(null);
 
@@ -49,7 +49,15 @@ export function ClassicDraftView({ live, sorted, leader, selectedId, setSelected
         <section className="panel">
           <h2>Standings</h2>
           <div className="table-scroll">
-            <table>
+            <table className="standings-table">
+              <colgroup>
+                <col className="standings-col-rank" />
+                <col className="standings-col-name" />
+                <col className="standings-col-total" />
+                <col className="standings-col-split" />
+                <col className="standings-col-split" />
+                <col className="standings-col-split" />
+              </colgroup>
               <thead>
                 <tr>
                   <th>#</th>
@@ -58,7 +66,6 @@ export function ClassicDraftView({ live, sorted, leader, selectedId, setSelected
                   <th className="num">P–Pick</th>
                   <th className="num">P–Team</th>
                   <th className="num">R1</th>
-                  <th className="num">Δ</th>
                 </tr>
               </thead>
               <tbody>
@@ -78,12 +85,11 @@ export function ClassicDraftView({ live, sorted, leader, selectedId, setSelected
                     <td className="num">{s.score.playerPick}</td>
                     <td className="num">{s.score.playerTeam}</td>
                     <td className="num">{s.score.firstRound}</td>
-                    <td className="num">{leader - s.score.total}</td>
                   </tr>
                 ))}
                 {!sorted.length ? (
                   <tr>
-                    <td colSpan={7} className="muted">
+                    <td colSpan={6} className="muted">
                       No entries loaded. Run <code>npm run prebuild</code> after updating the CSV.
                     </td>
                   </tr>
@@ -106,20 +112,23 @@ export function ClassicDraftView({ live, sorted, leader, selectedId, setSelected
                 </tr>
               </thead>
               <tbody>
-                {(live?.picks ?? []).map((p) => (
-                  <tr key={p.overall}>
-                    <td className="num">{p.overall}</td>
-                    <td>
-                      {p.teamLogoUrl ? (
-                        // eslint-disable-next-line @next/next/no-img-element
-                        <img src={p.teamLogoUrl} alt="" className="inline-team-ico" />
-                      ) : null}{" "}
-                      {p.teamDisplay ?? "—"}
-                    </td>
-                    <td>{p.playerDisplay ?? "—"}</td>
-                    <td className="muted">{p.status}</td>
-                  </tr>
-                ))}
+                {(live?.picks ?? []).map((p) => {
+                  const official = slotHasActualPlayer(p.playerDisplay);
+                  return (
+                    <tr key={p.overall}>
+                      <td className="num">{p.overall}</td>
+                      <td>
+                        {p.teamLogoUrl ? (
+                          // eslint-disable-next-line @next/next/no-img-element
+                          <img src={p.teamLogoUrl} alt="" className="inline-team-ico" />
+                        ) : null}{" "}
+                        {p.teamDisplay ?? "—"}
+                      </td>
+                      <td>{official ? (p.playerDisplay ?? "—") : ""}</td>
+                      <td className="muted">{official ? p.status : ""}</td>
+                    </tr>
+                  );
+                })}
                 {!live?.picks?.length ? (
                   <tr>
                     <td colSpan={4} className="muted">

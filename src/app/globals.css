@@ -75,6 +75,8 @@ main {
   .form-cta {
     flex-direction: column;
     align-items: stretch;
+    /* Override space-between so the CTA button stays under the copy */
+    justify-content: flex-start;
   }
 
   a.cta-btn {
@@ -240,6 +242,24 @@ tr:hover td {
 .num {
   text-align: right;
   font-variant-numeric: tabular-nums;
+}
+
+/* Standings: P–Pick, P–Team, and R1 share the same column width */
+.standings-table {
+  table-layout: fixed;
+  width: 100%;
+}
+
+.standings-table col.standings-col-rank {
+  width: 2.25rem;
+}
+
+.standings-table col.standings-col-total {
+  width: 3.25rem;
+}
+
+.standings-table col.standings-col-split {
+  width: 4rem;
 }
 
 button.link {
