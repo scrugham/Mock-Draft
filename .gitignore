@@ -6,3 +6,10 @@ dist
 .env.local
 *.log
 .DS_Store
+
+# Real contestant data (names, emails in CSV export, picks) — keep local / deploy only, not on public GitHub
+input/Entries - Grid view.csv
+public/entries.json
+
+# Optional live override filled with real pick data during the draft
+public/manual-draft.json

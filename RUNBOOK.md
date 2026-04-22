@@ -1,8 +1,20 @@
 # Mock Draft-Off — draft night runbook
 
+## Public GitHub vs private data
+
+These paths are **gitignored** so you can use a public repository without publishing real contestants:
+
+- `input/Entries - Grid view.csv` — your Zite export (includes email and any extra columns).
+- `public/entries.json` — generated from that CSV by `npm run prebuild` (names, picks, IDs).
+- `public/manual-draft.json` — optional live override you may edit during the draft.
+
+The repo includes **`public/entries.json.example`** (`[]` only) as a shape reference. A fresh clone has no `entries.json`; `/api/entries` returns an empty list until you run `prebuild` locally.
+
+**Typical deploy with real entries:** keep the CSV on your machine (or in a private CI secret), run `npm run prebuild`, then deploy from that directory (for example `vercel deploy`) so the generated `public/entries.json` is uploaded with the build even though it is not committed to GitHub.
+
 ## Before the draft
 
-1. Export entries from your form provider as CSV into `input/Entries - Grid view.csv` (same columns as today: `ID`, `Contestant Name`, `Picks JSON`, etc.).
+1. Export entries from your form provider as CSV into `input/Entries - Grid view.csv` (same columns as today: `ID`, `Contestant Name`, `Picks JSON`, etc.). See `input/README.md`.
 2. From the project root, run `npm install` once, then `npm run prebuild` to regenerate `public/entries.json` from the CSV. The build script also tries to attach ESPN prospect headshots to each predicted player (for the **Face board** layout); it needs network access during `prebuild`.
 3. Deploy (for example Vercel) with `DRAFT_SEASON=2026` set in the project environment variables.
 
