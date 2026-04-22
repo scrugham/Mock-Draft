@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect, useRef } from "react";
 import type { LiveDraftResponse, ScoredEntry } from "@/lib/types";
 import { rowPoints } from "@/lib/row-points";
 
@@ -14,6 +15,16 @@ type Props = {
 
 export function ClassicDraftView({ live, sorted, leader, selectedId, setSelectedId, loadErr }: Props) {
   const selected = sorted.find((s) => s.entry.id === selectedId) ?? null;
+  const entryDetailRef = useRef<HTMLElement>(null);
+
+  useEffect(() => {
+    if (!selectedId) return;
+    const el = entryDetailRef.current;
+    if (!el) return;
+    requestAnimationFrame(() => {
+      el.scrollIntoView({ behavior: "smooth", block: "start" });
+    });
+  }, [selectedId]);
 
   return (
     <>
@@ -36,47 +47,8 @@ export function ClassicDraftView({ live, sorted, leader, selectedId, setSelected
 
       <div className="grid two">
         <section className="panel">
-          <h2>Live Round 1 (actual)</h2>
-          <div style={{ overflowX: "auto" }}>
-            <table>
-              <thead>
-                <tr>
-                  <th>#</th>
-                  <th>Team</th>
-                  <th>Player</th>
-                  <th>Status</th>
-                </tr>
-              </thead>
-              <tbody>
-                {(live?.picks ?? []).map((p) => (
-                  <tr key={p.overall}>
-                    <td className="num">{p.overall}</td>
-                    <td>
-                      {p.teamLogoUrl ? (
-                        // eslint-disable-next-line @next/next/no-img-element
-                        <img src={p.teamLogoUrl} alt="" className="inline-team-ico" />
-                      ) : null}{" "}
-                      {p.teamDisplay ?? "—"}
-                    </td>
-                    <td>{p.playerDisplay ?? "—"}</td>
-                    <td className="muted">{p.status}</td>
-                  </tr>
-                ))}
-                {!live?.picks?.length ? (
-                  <tr>
-                    <td colSpan={4} className="muted">
-                      No picks yet (pre-draft or load error).
-                    </td>
-                  </tr>
-                ) : null}
-              </tbody>
-            </table>
-          </div>
-        </section>
-
-        <section className="panel">
           <h2>Standings</h2>
-          <div style={{ overflowX: "auto" }}>
+          <div className="table-scroll">
             <table>
               <thead>
                 <tr>
@@ -120,10 +92,53 @@ export function ClassicDraftView({ live, sorted, leader, selectedId, setSelected
             </table>
           </div>
         </section>
+
+        <section className="panel">
+          <h2>Live Round 1 (actual)</h2>
+          <div className="table-scroll">
+            <table>
+              <thead>
+                <tr>
+                  <th>#</th>
+                  <th>Team</th>
+                  <th>Player</th>
+                  <th>Status</th>
+                </tr>
+              </thead>
+              <tbody>
+                {(live?.picks ?? []).map((p) => (
+                  <tr key={p.overall}>
+                    <td className="num">{p.overall}</td>
+                    <td>
+                      {p.teamLogoUrl ? (
+                        // eslint-disable-next-line @next/next/no-img-element
+                        <img src={p.teamLogoUrl} alt="" className="inline-team-ico" />
+                      ) : null}{" "}
+                      {p.teamDisplay ?? "—"}
+                    </td>
+                    <td>{p.playerDisplay ?? "—"}</td>
+                    <td className="muted">{p.status}</td>
+                  </tr>
+                ))}
+                {!live?.picks?.length ? (
+                  <tr>
+                    <td colSpan={4} className="muted">
+                      No picks yet (pre-draft or load error).
+                    </td>
+                  </tr>
+                ) : null}
+              </tbody>
+            </table>
+          </div>
+        </section>
       </div>
 
       {selected ? (
-        <section className="panel" style={{ marginTop: "1rem" }}>
+        <section
+          ref={entryDetailRef}
+          className="panel entry-detail-panel"
+          style={{ marginTop: "1rem" }}
+        >
           <div className="detail-head">
             <h2 style={{ margin: 0 }}>{selected.entry.name}</h2>
             <div className="score-pill">
@@ -135,7 +150,7 @@ export function ClassicDraftView({ live, sorted, leader, selectedId, setSelected
               Close
             </button>
           </div>
-          <div style={{ overflowX: "auto" }}>
+          <div className="table-scroll">
             <table>
               <thead>
                 <tr>

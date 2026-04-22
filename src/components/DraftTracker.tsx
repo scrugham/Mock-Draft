@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import type { ContestantEntry, LiveDraftResponse } from "@/lib/types";
 import { scoreEntry } from "@/lib/scoring";
@@ -69,7 +70,17 @@ export function DraftTracker() {
 
   return (
     <main className={view === "faces" ? "layout-wide" : undefined}>
-      <h1>Scrugg&apos;s Mock Draft-Off — Live</h1>
+      <div className="site-header">
+        <Image
+          src="/logo.png"
+          alt=""
+          width={44}
+          height={44}
+          className="site-logo"
+          priority
+        />
+        <h1>Scrugg&apos;s Mock Draft-Off - Live</h1>
+      </div>
       <p className="sub">
         Round 1 board and standings. Scores refresh about every {POLL_MS / 1000}s. Use{" "}
         <strong>Classic</strong> or <strong>Face board</strong> below; your choice is saved in this
