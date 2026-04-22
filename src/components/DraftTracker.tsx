@@ -12,6 +12,9 @@ const VIEW_KEY = "mockDraftViewMode";
 
 type ViewMode = "classic" | "faces";
 
+const MOCK_DRAFT_FORM_URL = "https://keo68whvic.zite.so/";
+const AUTHOR_GITHUB_URL = "https://github.com/scrugham";
+
 export function DraftTracker() {
   const [live, setLive] = useState<LiveDraftResponse | null>(null);
   const [entries, setEntries] = useState<ContestantEntry[]>([]);
@@ -81,6 +84,21 @@ export function DraftTracker() {
         />
         <h1>Scrugg&apos;s Mock Draft-Off - Live</h1>
       </div>
+
+      <div className="form-cta" role="region" aria-label="Mock draft entry form">
+        <p className="form-cta-text">
+          <strong>Mock draft form</strong> — submit your Round 1 picks on Zite (opens in a new tab).
+        </p>
+        <a
+          className="cta-btn"
+          href={MOCK_DRAFT_FORM_URL}
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          Submit your mock draft
+        </a>
+      </div>
+
       <p className="sub">
         Round 1 board and standings. Scores refresh about every {POLL_MS / 1000}s. Use{" "}
         <strong>Classic</strong> or <strong>Face board</strong> below; your choice is saved in this
@@ -117,6 +135,15 @@ export function DraftTracker() {
       ) : (
         <FacesMatrixView live={live} sorted={sorted} loadErr={loadErr} />
       )}
+
+      <footer className="site-footer">
+        <p>
+          Created by Daniel Scrugham ·{" "}
+          <a href={AUTHOR_GITHUB_URL} target="_blank" rel="noopener noreferrer">
+            github.com/scrugham
+          </a>
+        </p>
+      </footer>
     </main>
   );
 }

@@ -1,13 +1,14 @@
 :root {
-  --bg: #0f1419;
-  --panel: #1a2332;
-  --border: #2d3a4d;
-  --text: #e8eef7;
-  --muted: #8b9cb3;
-  --accent: #3b82f6;
-  --good: #22c55e;
-  --warn: #f59e0b;
-  --bad: #ef4444;
+  --bg: #f2f0eb;
+  --panel: #ffffff;
+  --border: #e0dcd3;
+  --text: #1a2332;
+  --muted: #5c6b7d;
+  --accent: #3d5a80;
+  --accent-soft: #e8eef5;
+  --good: #166534;
+  --warn: #a16207;
+  --bad: #b91c1c;
   --font: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
 }
 
@@ -70,6 +71,15 @@ main {
   td {
     padding: 0.35rem 0.25rem;
   }
+
+  .form-cta {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  a.cta-btn {
+    text-align: center;
+  }
 }
 
 .site-header {
@@ -104,6 +114,72 @@ h1 {
   margin: 0 0 1.25rem;
 }
 
+.form-cta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem 1rem;
+  padding: 0.65rem 0.85rem;
+  margin: 0 0 1rem;
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  box-shadow: 0 1px 2px rgba(26, 35, 50, 0.04);
+}
+
+.form-cta-text {
+  margin: 0;
+  font-size: 0.88rem;
+  color: var(--text);
+  flex: 1 1 12rem;
+  line-height: 1.4;
+}
+
+.form-cta-text strong {
+  font-weight: 600;
+}
+
+a.cta-btn {
+  display: inline-block;
+  text-decoration: none;
+  font-size: 0.85rem;
+  font-weight: 600;
+  padding: 0.45rem 1rem;
+  border-radius: 8px;
+  background: var(--accent);
+  color: #fff;
+  border: 1px solid #2c4a6e;
+  white-space: nowrap;
+}
+
+a.cta-btn:hover {
+  filter: brightness(1.06);
+  color: #fff;
+}
+
+a.cta-btn:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+.site-footer {
+  margin-top: 2.5rem;
+  padding-top: 1.25rem;
+  border-top: 1px solid var(--border);
+}
+
+.site-footer p {
+  margin: 0;
+  font-size: 0.8rem;
+  color: var(--muted);
+  text-align: center;
+}
+
+.site-footer a {
+  font-weight: 500;
+}
+
 .table-scroll {
   overflow-x: auto;
   -webkit-overflow-scrolling: touch;
@@ -124,8 +200,9 @@ h1 {
 .panel {
   background: var(--panel);
   border: 1px solid var(--border);
-  border-radius: 10px;
+  border-radius: 12px;
   padding: 1rem;
+  box-shadow: 0 1px 2px rgba(26, 35, 50, 0.04);
 }
 
 .panel h2 {
@@ -157,7 +234,7 @@ th {
 }
 
 tr:hover td {
-  background: rgba(255, 255, 255, 0.02);
+  background: rgba(26, 35, 50, 0.04);
 }
 
 .num {
@@ -176,7 +253,7 @@ button.link {
 }
 
 button.link:hover {
-  color: #60a5fa;
+  color: #2c4a6e;
 }
 
 .badge {
@@ -189,13 +266,13 @@ button.link:hover {
 }
 
 .badge.pp {
-  background: rgba(59, 130, 246, 0.25);
-  color: #93c5fd;
+  background: rgba(61, 90, 128, 0.14);
+  color: #2c4a6e;
 }
 
 .badge.pt {
-  background: rgba(34, 197, 94, 0.25);
-  color: #86efac;
+  background: rgba(22, 101, 52, 0.12);
+  color: var(--good);
 }
 
 .status-bar {
@@ -279,8 +356,8 @@ main.layout-wide {
 
 .toggle-btn.active {
   border-color: var(--accent);
-  background: rgba(59, 130, 246, 0.15);
-  color: #dbeafe;
+  background: var(--accent-soft);
+  color: #24364d;
 }
 
 .inline-team-ico {
@@ -401,17 +478,17 @@ main.layout-wide {
 }
 
 .matrix-cell.pending {
-  background: rgba(255, 255, 255, 0.04);
+  background: rgba(26, 35, 50, 0.04);
 }
 
 .matrix-cell.hit {
-  background: rgba(34, 197, 94, 0.22);
-  border-color: rgba(34, 197, 94, 0.55);
+  background: rgba(22, 101, 52, 0.1);
+  border-color: rgba(22, 101, 52, 0.35);
 }
 
 .matrix-cell.miss {
-  background: rgba(239, 68, 68, 0.2);
-  border-color: rgba(239, 68, 68, 0.45);
+  background: rgba(185, 28, 28, 0.08);
+  border-color: rgba(185, 28, 28, 0.35);
 }
 
 .matrix-cell-logos {
@@ -431,7 +508,7 @@ main.layout-wide {
   width: 22px;
   height: 22px;
   border-radius: 4px;
-  background: rgba(255, 255, 255, 0.06);
+  background: rgba(26, 35, 50, 0.08);
 }
 
 .matrix-face-wrap {
@@ -439,7 +516,7 @@ main.layout-wide {
   height: 52px;
   border-radius: 50%;
   overflow: hidden;
-  background: rgba(0, 0, 0, 0.35);
+  background: #e4e1da;
   flex-shrink: 0;
 }
 
@@ -458,7 +535,7 @@ main.layout-wide {
   justify-content: center;
   font-size: 0.75rem;
   font-weight: 700;
-  color: #cbd5e1;
+  color: var(--muted);
 }
 
 .matrix-name-short {

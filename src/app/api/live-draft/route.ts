@@ -3,6 +3,7 @@ import { readFile } from "fs/promises";
 import path from "path";
 import type { LiveDraftResponse, LivePick } from "@/lib/types";
 import { fetchRound1LivePicks } from "@/lib/espn-draft";
+import { finalizeLivePicks } from "@/lib/live-pick-display";
 
 function seasonFromEnv(): number {
   const y = process.env.DRAFT_SEASON;
@@ -36,7 +37,7 @@ export async function GET() {
       season,
       fetchedAt,
       source: "manual",
-      picks: manual,
+      picks: finalizeLivePicks(manual, undefined),
     };
     return NextResponse.json(body);
   }

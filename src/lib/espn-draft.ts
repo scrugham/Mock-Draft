@@ -1,4 +1,5 @@
 import type { LivePick } from "@/lib/types";
+import { assignDisplayStatuses, stripPlaceholderPlayerDisplay } from "@/lib/live-pick-display";
 
 type RefField = { $ref?: string };
 
@@ -15,6 +16,10 @@ type EspnPick = {
 type EspnRound = {
   number: number;
   picks?: EspnPick[];
+  status?: {
+    round?: number;
+    type?: { id?: number; name?: string; state?: string; description?: string };
+  };
 };
 
 type EspnRoundsResponse = {
@@ -184,9 +189,12 @@ export async function fetchRound1LivePicks(season: number): Promise<LivePick[]> 
     return [];
   }
 
+  const roundState = r1.status?.type?.state;
+
   const resolved = await Promise.all(
     r1.picks.map(async (p) => {
-      const status = p.status?.name ?? "UNKNOWN";
+      const espnStatusName = p.status?.name ?? "UNKNOWN";
+      const espnStatusDesc = p.status?.description;
       const [teamDoc, athDoc] = await Promise.all([
         p.team?.$ref ? fetchRefDoc(p.team.$ref) : Promise.resolve(null),
         p.athlete?.$ref ? fetchRefDoc(p.athlete.$ref) : Promise.resolve(null),
@@ -196,17 +204,43 @@ export async function fetchRound1LivePicks(season: number): Promise<LivePick[]> 
         overall: p.overall,
         round: p.round,
         teamDisplay: teamDisplayFromDoc(teamDoc),
-        playerDisplay: athleteDisplayFromDoc(athDoc),
-        status,
+        playerDisplay: stripPlaceholderPlayerDisplay(athleteDisplayFromDoc(athDoc)),
+        espnStatusName,
+        espnStatusDesc,
         traded: Boolean(p.traded),
         tradeNote: p.tradeNote || undefined,
         headshotUrl: media.headshotUrl,
         positionAbbrev: media.positionAbbrev,
         collegeDisplay: null,
         teamLogoUrl: teamLogoFromDoc(teamDoc),
-      } satisfies LivePick;
+      };
     }),
   );
 
-  return resolved.sort((a, b) => a.overall - b.overall);
+  const sorted = resolved.sort((a, b) => a.overall - b.overall);
+  const statusLabels = assignDisplayStatuses(
+    sorted.map((r) => ({
+      overall: r.overall,
+      espnStatusName: r.espnStatusName,
+      espnStatusDesc: r.espnStatusDesc,
+      playerDisplay: r.playerDisplay,
+    })),
+    roundState,
+  );
+
+  return sorted.map(
+    (r, i): LivePick => ({
+      overall: r.overall,
+      round: r.round,
+      teamDisplay: r.teamDisplay,
+      playerDisplay: r.playerDisplay,
+      status: statusLabels[i] ?? r.espnStatusName,
+      traded: r.traded,
+      tradeNote: r.tradeNote,
+      headshotUrl: r.headshotUrl,
+      positionAbbrev: r.positionAbbrev,
+      collegeDisplay: r.collegeDisplay,
+      teamLogoUrl: r.teamLogoUrl,
+    }),
+  );
 }

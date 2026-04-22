@@ -1,6 +1,7 @@
 "use client";
 
 import type { LiveDraftResponse, LivePick } from "@/lib/types";
+import { slotHasActualPlayer } from "@/lib/live-pick-display";
 import { canonicalTeamKey } from "@/lib/team-aliases";
 import { nflTeamLogoUrl } from "@/lib/nfl-team-logo";
 import { PlayerFaceCell } from "@/components/PlayerFaceCell";
@@ -24,7 +25,7 @@ function cellOutcome(
 ): "pending" | "hit" | "miss" {
   if (!pred) return "pending";
   const slot = actual.find((a) => a.overall === overall);
-  const known = Boolean(slot?.playerDisplay?.trim());
+  const known = slotHasActualPlayer(slot?.playerDisplay);
   if (!known) return "pending";
   const { pp, pt } = rowPoints(pred, actual);
   return pp || pt ? "hit" : "miss";
@@ -79,7 +80,7 @@ export function FacesMatrixView({ live, sorted, loadErr }: Props) {
               {Array.from({ length: 32 }, (_, i) => {
                 const overall = i + 1;
                 const slot = picks.find((p) => p.overall === overall);
-                const actualKnown = Boolean(slot?.playerDisplay?.trim());
+                const actualKnown = slotHasActualPlayer(slot?.playerDisplay);
 
                 return (
                   <tr key={overall}>

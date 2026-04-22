@@ -1,4 +1,5 @@
 import type { ContestantEntry, LivePick, ScoreBreakdown } from "@/lib/types";
+import { slotHasActualPlayer } from "@/lib/live-pick-display";
 import { normalizePlayerName } from "@/lib/normalize";
 import { teamsMatch } from "@/lib/team-aliases";
 
@@ -12,9 +13,7 @@ function pickByOverall(picks: LivePick[], overall: number): LivePick | undefined
  * First round: distinct predicted players who appear anywhere in R1 actual.
  */
 export function scoreEntry(entry: ContestantEntry, actual: LivePick[]): ScoreBreakdown {
-  const actualWithPlayer = actual.filter(
-    (p) => p.playerDisplay && p.playerDisplay.trim().length > 0,
-  );
+  const actualWithPlayer = actual.filter((p) => slotHasActualPlayer(p.playerDisplay));
 
   const actualPlayersNorm = new Set(
     actualWithPlayer.map((p) => normalizePlayerName(p.playerDisplay!)),
@@ -28,8 +27,8 @@ export function scoreEntry(entry: ContestantEntry, actual: LivePick[]): ScoreBre
     const predPlayer = normalizePlayerName(row.player);
     if (predPlayer.length === 0) continue;
 
-    if (slot?.playerDisplay) {
-      const actPlayer = normalizePlayerName(slot.playerDisplay);
+    if (slotHasActualPlayer(slot?.playerDisplay)) {
+      const actPlayer = normalizePlayerName(slot!.playerDisplay!);
       if (actPlayer === predPlayer) {
         playerPick += 1;
       }
