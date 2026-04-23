@@ -1,3 +1,37 @@
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.spinner-arc {
+  transform-origin: 12px 12px;
+  animation: spin 0.75s linear infinite;
+}
+
+.standings-load-cell {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  min-height: 2.5rem;
+}
+
+.standings-load-cell .err-icon {
+  color: var(--bad);
+  flex-shrink: 0;
+}
+
+.standings-load-cell .spinner-ico {
+  color: var(--accent);
+  flex-shrink: 0;
+}
+
+.matrix-blocked {
+  margin: 0.5rem 0 1rem;
+  min-height: 2.5rem;
+}
+
 :root {
   --bg: #f2f0eb;
   --panel: #ffffff;

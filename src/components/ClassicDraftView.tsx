@@ -4,6 +4,7 @@ import { useEffect, useRef } from "react";
 import type { LiveDraftResponse, ScoredEntry } from "@/lib/types";
 import { rowPoints } from "@/lib/row-points";
 import { slotHasActualPlayer } from "@/lib/live-pick-display";
+import { ErrorIcon, SpinnerIcon } from "@/components/LoadStateIcons";
 
 type Props = {
   live: LiveDraftResponse | null;
@@ -11,9 +12,19 @@ type Props = {
   selectedId: string | null;
   setSelectedId: (id: string | null) => void;
   loadErr: string | null;
+  isInitialLoad: boolean;
+  entriesError: string | null;
 };
 
-export function ClassicDraftView({ live, sorted, selectedId, setSelectedId, loadErr }: Props) {
+export function ClassicDraftView({
+  live,
+  sorted,
+  selectedId,
+  setSelectedId,
+  loadErr,
+  isInitialLoad,
+  entriesError,
+}: Props) {
   const selected = sorted.find((s) => s.entry.id === selectedId) ?? null;
   const entryDetailRef = useRef<HTMLElement>(null);
 
@@ -79,7 +90,27 @@ export function ClassicDraftView({ live, sorted, selectedId, setSelectedId, load
                     <td className="num">{s.score.firstRound}</td>
                   </tr>
                 ))}
-                {!sorted.length ? (
+                {isInitialLoad && !sorted.length ? (
+                  <tr>
+                    <td colSpan={6} className="muted">
+                      <div className="standings-load-cell">
+                        <SpinnerIcon className="spinner-ico" label="Loading entries" />
+                        <span>Loading entries…</span>
+                      </div>
+                    </td>
+                  </tr>
+                ) : null}
+                {!isInitialLoad && entriesError && !sorted.length ? (
+                  <tr>
+                    <td colSpan={6} className="muted">
+                      <div className="standings-load-cell">
+                        <ErrorIcon className="err-icon" label="Failed to load entries" />
+                        <span title={entriesError}>{entriesError}</span>
+                      </div>
+                    </td>
+                  </tr>
+                ) : null}
+                {!isInitialLoad && !entriesError && !sorted.length ? (
                   <tr>
                     <td colSpan={6} className="muted">
                       No entries loaded. Run <code>npm run prebuild</code> after updating the CSV.

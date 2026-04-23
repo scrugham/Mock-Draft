@@ -18,6 +18,8 @@ export function DraftTracker() {
   const [live, setLive] = useState<LiveDraftResponse | null>(null);
   const [entries, setEntries] = useState<ContestantEntry[]>([]);
   const [loadErr, setLoadErr] = useState<string | null>(null);
+  const [isInitialLoad, setIsInitialLoad] = useState(true);
+  const [entriesError, setEntriesError] = useState<string | null>(null);
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const [view, setView] = useState<ViewMode>("classic");
 
@@ -40,12 +42,21 @@ export function DraftTracker() {
         fetch("/api/entries", { cache: "no-store" }),
       ]);
       const dJson = (await dRes.json()) as LiveDraftResponse;
-      const eJson = (await eRes.json()) as { entries: ContestantEntry[] };
       setLive(dJson);
-      setEntries(eJson.entries ?? []);
       setLoadErr(!dRes.ok ? dJson.error ?? `HTTP ${dRes.status}` : dJson.error ?? null);
+      if (eRes.ok) {
+        const eJson = (await eRes.json()) as { entries: ContestantEntry[] };
+        setEntries(eJson.entries ?? []);
+        setEntriesError(null);
+      } else {
+        setEntriesError(`Could not load entries (HTTP ${eRes.status})`);
+      }
     } catch (e) {
-      setLoadErr(e instanceof Error ? e.message : "Network error");
+      const msg = e instanceof Error ? e.message : "Network error";
+      setLoadErr(msg);
+      setEntriesError(msg);
+    } finally {
+      setIsInitialLoad(false);
     }
   }, []);
 
@@ -118,9 +129,17 @@ export function DraftTracker() {
           selectedId={selectedId}
           setSelectedId={setSelectedId}
           loadErr={loadErr}
+          isInitialLoad={isInitialLoad}
+          entriesError={entriesError}
         />
       ) : (
-        <FacesMatrixView live={live} sorted={sorted} loadErr={loadErr} />
+        <FacesMatrixView
+          live={live}
+          sorted={sorted}
+          loadErr={loadErr}
+          isInitialLoad={isInitialLoad}
+          entriesError={entriesError}
+        />
       )}
 
       <footer className="site-footer">

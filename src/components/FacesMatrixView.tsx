@@ -7,11 +7,14 @@ import { nflTeamLogoUrl } from "@/lib/nfl-team-logo";
 import { PlayerFaceCell } from "@/components/PlayerFaceCell";
 import type { ContestantEntry, ScoredEntry } from "@/lib/types";
 import { rowPoints } from "@/lib/row-points";
+import { ErrorIcon, SpinnerIcon } from "@/components/LoadStateIcons";
 
 type Props = {
   live: LiveDraftResponse | null;
   sorted: ScoredEntry[];
   loadErr: string | null;
+  isInitialLoad: boolean;
+  entriesError: string | null;
 };
 
 function pickForOverall(entry: ContestantEntry, overall: number) {
@@ -31,8 +34,9 @@ function cellOutcome(
   return pp || pt ? "hit" : "miss";
 }
 
-export function FacesMatrixView({ live, sorted, loadErr }: Props) {
+export function FacesMatrixView({ live, sorted, loadErr, isInitialLoad, entriesError }: Props) {
   const picks = live?.picks ?? [];
+  const showMatrix = !isInitialLoad && !entriesError && sorted.length > 0;
 
   return (
     <>
@@ -55,10 +59,34 @@ export function FacesMatrixView({ live, sorted, loadErr }: Props) {
 
       <section className="panel matrix-panel">
         <h2>Face board (one column per contestant)</h2>
+        {isInitialLoad && !sorted.length ? (
+          <p className="matrix-blocked muted">
+            <span className="standings-load-cell" style={{ justifyContent: "flex-start" }}>
+              <SpinnerIcon className="spinner-ico" label="Loading entries" />
+              <span>Loading entries…</span>
+            </span>
+          </p>
+        ) : null}
+        {!isInitialLoad && entriesError && !sorted.length ? (
+          <p className="matrix-blocked muted">
+            <span className="standings-load-cell" style={{ justifyContent: "flex-start" }}>
+              <ErrorIcon className="err-icon" label="Failed to load entries" />
+              <span title={entriesError}>{entriesError}</span>
+            </span>
+          </p>
+        ) : null}
+        {!isInitialLoad && !entriesError && !sorted.length ? (
+          <p className="matrix-blocked muted">
+            No entries loaded. Run <code>npm run prebuild</code> after updating the CSV.
+          </p>
+        ) : null}
+        {showMatrix ? (
         <p className="muted matrix-hint">
           Green = player–pick or player–team hit for that row. Red = pick is in and no hit. Hover a
           face for details. Logos are the predicted NFL team.
         </p>
+        ) : null}
+        {showMatrix ? (
         <div className="matrix-scroll">
           <table className="matrix-table">
             <thead>
@@ -133,6 +161,7 @@ export function FacesMatrixView({ live, sorted, loadErr }: Props) {
             </tbody>
           </table>
         </div>
+        ) : null}
       </section>
     </>
   );
