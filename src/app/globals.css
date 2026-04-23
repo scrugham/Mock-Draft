@@ -71,18 +71,6 @@ main {
   td {
     padding: 0.35rem 0.25rem;
   }
-
-  .form-cta {
-    flex-direction: column;
-    align-items: stretch;
-    /* Override space-between so the CTA button stays under the copy */
-    justify-content: flex-start;
-    align-content: flex-start;
-  }
-
-  a.cta-btn {
-    text-align: center;
-  }
 }
 
 .site-header {
@@ -115,63 +103,6 @@ h1 {
   color: var(--muted);
   font-size: 0.9rem;
   margin: 0 0 1.25rem;
-}
-
-.form-cta {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  justify-content: space-between;
-  gap: 0.75rem 1rem;
-  padding: 0.65rem 0.85rem;
-  margin: 0 0 1rem;
-  background: var(--panel);
-  border: 1px solid var(--border);
-  border-radius: 10px;
-  box-shadow: 0 1px 2px rgba(26, 35, 50, 0.04);
-}
-
-.form-cta-text {
-  margin: 0;
-  font-size: 0.88rem;
-  color: var(--text);
-  /* Default: no flex growth (safe when .form-cta is column on narrow screens). */
-  flex: 0 1 auto;
-  line-height: 1.4;
-}
-
-@media (min-width: 600px) {
-  .form-cta-text {
-    /* Row layout: let copy use horizontal space before the button */
-    flex: 1 1 12rem;
-  }
-}
-
-.form-cta-text strong {
-  font-weight: 600;
-}
-
-a.cta-btn {
-  display: inline-block;
-  text-decoration: none;
-  font-size: 0.85rem;
-  font-weight: 600;
-  padding: 0.45rem 1rem;
-  border-radius: 8px;
-  background: var(--accent);
-  color: #fff;
-  border: 1px solid #2c4a6e;
-  white-space: nowrap;
-}
-
-a.cta-btn:hover {
-  filter: brightness(1.06);
-  color: #fff;
-}
-
-a.cta-btn:focus-visible {
-  outline: 2px solid var(--accent);
-  outline-offset: 2px;
 }
 
 .site-footer {

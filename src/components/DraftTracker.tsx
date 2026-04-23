@@ -12,7 +12,6 @@ const VIEW_KEY = "mockDraftViewMode";
 
 type ViewMode = "classic" | "faces";
 
-const MOCK_DRAFT_FORM_URL = "https://keo68whvic.zite.so/";
 const AUTHOR_GITHUB_URL = "https://github.com/scrugham";
 
 export function DraftTracker() {
@@ -86,20 +85,6 @@ export function DraftTracker() {
           priority
         />
         <h1>Scrugg&apos;s Mock Draft-Off</h1>
-      </div>
-
-      <div className="form-cta" role="region" aria-label="Mock draft entry form">
-        <p className="form-cta-text">
-          <strong>Mock draft form</strong> - submit your Round 1 picks on Zite (opens in a new tab).
-        </p>
-        <a
-          className="cta-btn"
-          href={MOCK_DRAFT_FORM_URL}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Submit your mock draft
-        </a>
       </div>
 
       <p className="sub">

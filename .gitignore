@@ -13,3 +13,5 @@ public/entries.json
 
 # Optional live override filled with real pick data during the draft
 public/manual-draft.json
+.vercel
+.env*.local
